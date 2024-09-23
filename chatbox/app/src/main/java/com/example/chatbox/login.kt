@@ -17,5 +17,7 @@ class login : AppCompatActivity() { lateinit var binding:ActivityMainBinding
             val intent = Intent(this, cadastro::class.java)
             startActivity(intent)
         }
+
+
     }
 }

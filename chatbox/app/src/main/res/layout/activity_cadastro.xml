@@ -7,19 +7,61 @@
     android:layout_height="match_parent"
     tools:context=".cadastro">
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="tela de cadastro "
-        tools:layout_editor_absoluteX="150dp"
-        tools:layout_editor_absoluteY="269dp" />
-
     <Button
-        android:id="@+id/botao"
+        android:id="@+id/bt_reg"
+        android:layout_width="250dp"
+        android:layout_height="48dp"
+        android:layout_marginBottom="203dp"
+        android:text="registrar-se"
+        app:layout_constraintBottom_toTopOf="@+id/lg_red"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <EditText
+        android:id="@+id/email"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="tela de login"
-        tools:layout_editor_absoluteX="142dp"
-        tools:layout_editor_absoluteY="370dp" />
+        android:layout_marginBottom="8dp"
+        android:ems="10"
+        android:hint="email"
+        android:inputType="text"
+        app:layout_constraintBottom_toTopOf="@+id/editTextText2"
+        app:layout_constraintEnd_toEndOf="@+id/editTextDate"
+        app:layout_constraintStart_toStartOf="@+id/editTextDate" />
+
+    <EditText
+        android:id="@+id/editTextText2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:ems="10"
+        android:hint="senha"
+        android:inputType="text"
+        app:layout_constraintBottom_toTopOf="@+id/editTextDate"
+        app:layout_constraintEnd_toEndOf="@+id/editTextDate"
+        app:layout_constraintStart_toStartOf="@+id/editTextDate" />
+
+    <EditText
+        android:id="@+id/editTextDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="30dp"
+        android:ems="10"
+        android:hint="DD/MM/AA"
+        android:inputType="date"
+        app:layout_constraintBottom_toTopOf="@+id/bt_reg"
+        app:layout_constraintEnd_toEndOf="@+id/bt_reg"
+        app:layout_constraintStart_toStartOf="@+id/bt_reg" />
+
+    <TextView
+        android:id="@+id/lg_red"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:text="já possui uma conta?"
+        android:textColor="#8E79C3"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/bt_reg"
+        app:layout_constraintStart_toStartOf="@+id/bt_reg" />
 </androidx.constraintlayout.widget.ConstraintLayout>

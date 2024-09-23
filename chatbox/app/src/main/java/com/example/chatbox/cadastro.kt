@@ -15,9 +15,8 @@ class cadastro : AppCompatActivity() {lateinit var binding: ActivityCadastroBind
         binding = ActivityCadastroBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.botao.setOnClickListener {
-            val intent = Intent(this, login::class.java)
-            startActivity(intent)
-        }
+        binding.lgRed.setOnClickListener{ val intent = Intent(this, login::class.java)
+            startActivity(intent)}
+
     }
 }
