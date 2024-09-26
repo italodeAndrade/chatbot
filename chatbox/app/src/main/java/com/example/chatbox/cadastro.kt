@@ -17,6 +17,9 @@ import android.content.Context
 import android.widget.Toast
 import kotlinx.coroutines.flow.Flow
 import androidx.room.Dao
+import android.text.Editable
+import android.text.TextWatcher
+import androidx.lifecycle.lifecycleScope
 
 
 @Entity(tableName = "login_table")
@@ -58,7 +61,7 @@ abstract class LoginDatabase : RoomDatabase() {
     }
 }
 
-class Cadastro : AppCompatActivity() {
+class cadastro : AppCompatActivity() {
     private lateinit var binding: ActivityCadastroBinding
     private lateinit var db: LoginDatabase
 
@@ -69,35 +72,92 @@ class Cadastro : AppCompatActivity() {
 
         db = LoginDatabase.getDatabase(applicationContext)
 
+        binding.editTextDate.addTextChangedListener(object : TextWatcher {
+            private var isUpdating = false
+            private val mask = "##/##/####"
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+
+            override fun afterTextChanged(s: Editable?) {
+                if (isUpdating) return
+
+                var text = s.toString().filter { it.isDigit() }
+
+                if (text.length > 8) {
+                    text = text.substring(0, 8)
+                }
+
+                val newText = StringBuilder()
+                var i = 0
+
+                for (m in mask.toCharArray()) {
+                    if (m != '#' && text.length > i) {
+                        newText.append(m)
+                    } else {
+                        if (i >= text.length) break
+                        newText.append(text[i])
+                        i++
+                    }
+                }
+
+                isUpdating = true
+                s?.replace(0, s.length, newText)
+                isUpdating = false
+            }
+        })
+
         binding.btReg.setOnClickListener {
             val email = binding.email.text.toString()
             val senha = binding.editTextText2.text.toString()
             val dataNascimento = binding.editTextDate.text.toString()
 
             if (email.isNotEmpty() && senha.isNotEmpty() && dataNascimento.isNotEmpty()) {
-                lifecycleScope.launch {
-                    try {
-                        val loginEntity = LoginEntity(email = email, senha = senha, dataNascimento = dataNascimento)
-                        db.loginDao().insertLogin(loginEntity)
-                        Toast.makeText(this@Cadastro, "Registro realizado com sucesso!", Toast.LENGTH_SHORT).show()
-                        binding.email.text.clear()
-                        binding.editTextText2.text.clear()
-                        binding.editTextDate.text.clear()
-                    } catch (e: Exception) {
-                        Toast.makeText(this@Cadastro, "Erro ao registrar: ${e.message}", Toast.LENGTH_SHORT).show()
-                    }
+                // Validação de formato de e-mail
+                if (!isEmailValid(email)) {
+                    Toast.makeText(this@cadastro, "E-mail inválido!", Toast.LENGTH_SHORT).show()
+                    return@setOnClickListener
                 }
+
+                val loginEntity = LoginEntity(email = email, senha = senha, dataNascimento = dataNascimento)
+                insertLogin(loginEntity)
             } else {
-                Toast.makeText(this, "Por favor, preencha todos os campos.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@cadastro, "Por favor, preencha todos os campos.", Toast.LENGTH_SHORT).show()
             }
         }
 
         binding.lgRed.setOnClickListener {
-            val intent = Intent(this, login::class.java)
+            val intent = Intent(this@cadastro, login::class.java)
             startActivity(intent)
         }
     }
+
+    private fun insertLogin(loginEntity: LoginEntity) {
+        lifecycleScope.launch {
+
+            try {
+                db.loginDao().insertLogin(loginEntity)
+                Toast.makeText(this@cadastro, "Registro realizado com sucesso!", Toast.LENGTH_SHORT).show()
+                binding.email.text.clear()
+                binding.editTextText2.text.clear()
+                binding.editTextDate.text.clear()
+            } catch (e: Exception) {
+                Toast.makeText(this@cadastro, "Erro ao registrar: ${e.message}", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    // Função para validar o formato do e-mail usando regex
+    private fun isEmailValid(email: String): Boolean {
+        return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()
+    }
 }
+
+
+
+
+
 
 
 

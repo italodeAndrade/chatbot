@@ -17,7 +17,7 @@ class login : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.inscreverse.setOnClickListener {
-            val intent = Intent(this, Cadastro::class.java)
+            val intent = Intent(this, cadastro::class.java)
             startActivity(intent)
         }
     }
