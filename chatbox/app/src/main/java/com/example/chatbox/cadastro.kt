@@ -19,7 +19,10 @@ import kotlinx.coroutines.flow.Flow
 import androidx.room.Dao
 import android.text.Editable
 import android.text.TextWatcher
-import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+
+
 
 
 @Entity(tableName = "login_table")
@@ -71,7 +74,6 @@ class cadastro : AppCompatActivity() {
         setContentView(binding.root)
 
         db = LoginDatabase.getDatabase(applicationContext)
-
         binding.editTextDate.addTextChangedListener(object : TextWatcher {
             private var isUpdating = false
             private val mask = "##/##/####"
@@ -114,14 +116,16 @@ class cadastro : AppCompatActivity() {
             val dataNascimento = binding.editTextDate.text.toString()
 
             if (email.isNotEmpty() && senha.isNotEmpty() && dataNascimento.isNotEmpty()) {
-                // Validação de formato de e-mail
                 if (!isEmailValid(email)) {
                     Toast.makeText(this@cadastro, "E-mail inválido!", Toast.LENGTH_SHORT).show()
                     return@setOnClickListener
                 }
 
                 val loginEntity = LoginEntity(email = email, senha = senha, dataNascimento = dataNascimento)
-                insertLogin(loginEntity)
+                // Insira o registro usando coroutines
+                lifecycleScope.launch {
+                    insertLogin(loginEntity)
+                }
             } else {
                 Toast.makeText(this@cadastro, "Por favor, preencha todos os campos.", Toast.LENGTH_SHORT).show()
             }
@@ -133,17 +137,20 @@ class cadastro : AppCompatActivity() {
         }
     }
 
-    private fun insertLogin(loginEntity: LoginEntity) {
-        lifecycleScope.launch {
-
+    private suspend fun insertLogin(loginEntity: LoginEntity) {
+        withContext(Dispatchers.IO) {
             try {
                 db.loginDao().insertLogin(loginEntity)
-                Toast.makeText(this@cadastro, "Registro realizado com sucesso!", Toast.LENGTH_SHORT).show()
-                binding.email.text.clear()
-                binding.editTextText2.text.clear()
-                binding.editTextDate.text.clear()
+                withContext(Dispatchers.Main) {
+                    Toast.makeText(this@cadastro, "Registro realizado com sucesso!", Toast.LENGTH_SHORT).show()
+                    binding.email.text.clear()
+                    binding.editTextText2.text.clear()
+                    binding.editTextDate.text.clear()
+                }
             } catch (e: Exception) {
-                Toast.makeText(this@cadastro, "Erro ao registrar: ${e.message}", Toast.LENGTH_SHORT).show()
+                withContext(Dispatchers.Main) {
+                    Toast.makeText(this@cadastro, "Erro ao registrar: ${e.message}", Toast.LENGTH_SHORT).show()
+                }
             }
         }
     }
@@ -153,6 +160,7 @@ class cadastro : AppCompatActivity() {
         return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()
     }
 }
+
 
 
 
