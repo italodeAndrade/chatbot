@@ -83,7 +83,8 @@
         android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="@+id/email"
         app:srcCompat="@drawable/pkb1"
-        tools:layout_editor_absoluteX="105dp" />
+        tools:layout_editor_absoluteX="105dp"
+        tools:ignore="MissingConstraints" />
 
     <TextView
         android:id="@+id/textView"
