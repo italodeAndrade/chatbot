@@ -5,7 +5,9 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".login">
+    android:visibility="visible"
+    tools:context=".login"
+    tools:visibility="visible">
 
     <Button
         android:id="@+id/button"
@@ -72,5 +74,27 @@
         android:text="senha"
         app:layout_constraintBottom_toTopOf="@+id/senha"
         app:layout_constraintStart_toStartOf="@+id/senha" />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="201dp"
+        android:layout_height="200dp"
+        android:layout_marginBottom="112dp"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="@+id/email"
+        app:srcCompat="@drawable/pkb1"
+        tools:layout_editor_absoluteX="105dp" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:rotation="-32"
+        android:rotationX="7"
+        android:rotationY="4"
+        android:text="PokeList"
+        tools:layout_editor_absoluteX="179dp"
+        tools:layout_editor_absoluteY="236dp" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
