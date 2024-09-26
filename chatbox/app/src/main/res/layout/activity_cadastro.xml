@@ -12,6 +12,7 @@
         android:layout_width="250dp"
         android:layout_height="48dp"
         android:layout_marginBottom="203dp"
+        android:backgroundTint="#FF0000"
         android:text="registrar-se"
         app:layout_constraintBottom_toTopOf="@+id/lg_red"
         app:layout_constraintEnd_toEndOf="parent"
@@ -58,10 +59,11 @@
         android:id="@+id/lg_red"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="48dp"
         android:text="já possui uma conta?"
-        android:textColor="#8E79C3"
+        android:textColor="#FF0000"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/bt_reg"
+        app:layout_constraintHorizontal_bias="0.508"
         app:layout_constraintStart_toStartOf="@+id/bt_reg" />
 </androidx.constraintlayout.widget.ConstraintLayout>
