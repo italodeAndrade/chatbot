@@ -8,12 +8,23 @@ import androidx.recyclerview.widget.RecyclerView
 
 class PokemonAdapter(
     private val pokemonList: List<Pokemon>,
-    private val onClick: (Pokemon) -> Unit
+    private val onItemClick: (Pokemon) -> Unit
 ) : RecyclerView.Adapter<PokemonAdapter.PokemonViewHolder>() {
 
-    class PokemonViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val nameTextView: TextView = view.findViewById(R.id.textViewPokemonName)
-        val urlTextView: TextView = view.findViewById(R.id.textViewPokemonUrl)
+    inner class PokemonViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val nameTextView: TextView = itemView.findViewById(R.id.pokemonName)
+        val weightTextView: TextView = itemView.findViewById(R.id.pokemonWeight)
+        val typeTextView: TextView = itemView.findViewById(R.id.pokemonType)
+
+        fun bind(pokemon: Pokemon) {
+            nameTextView.text = pokemon.name
+            weightTextView.text = "Peso: ${pokemon.weight} kg"
+            typeTextView.text = "Tipos: ${pokemon.types.joinToString(", ")}"
+
+            itemView.setOnClickListener {
+                onItemClick(pokemon)
+            }
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PokemonViewHolder {
@@ -23,12 +34,12 @@ class PokemonAdapter(
 
     override fun onBindViewHolder(holder: PokemonViewHolder, position: Int) {
         val pokemon = pokemonList[position]
-        holder.nameTextView.text = pokemon.name
-        holder.urlTextView.text = pokemon.url
-
-        holder.itemView.setOnClickListener { onClick(pokemon) }
+        holder.bind(pokemon)
     }
 
-    override fun getItemCount(): Int = pokemonList.size
+    override fun getItemCount(): Int {
+        return pokemonList.size
+    }
 }
+
 

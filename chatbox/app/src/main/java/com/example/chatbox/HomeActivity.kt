@@ -22,14 +22,18 @@ class HomeActivity : AppCompatActivity() {
         binding = ActivityHomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.recyclerView.layoutManager = LinearLayoutManager(this)
+        setupRecyclerView()
+        fetchPokemonList()
+    }
+
+    private fun setupRecyclerView() {
         pokemonAdapter = PokemonAdapter(pokemonList) { pokemon ->
             showPokemonDetails(pokemon)
         }
+        binding.recyclerView.layoutManager = LinearLayoutManager(this)
         binding.recyclerView.adapter = pokemonAdapter
-
-        fetchPokemonList()
     }
+
 
     private fun fetchPokemonList() {
         val retrofit = Retrofit.Builder()
@@ -41,10 +45,25 @@ class HomeActivity : AppCompatActivity() {
 
         CoroutineScope(Dispatchers.IO).launch {
             try {
-                val response = pokeApi.getPokemonList()
+
+                val response = pokeApi.getPokemonList(limit = 5)
                 if (response.isSuccessful) {
                     response.body()?.let { pokemons ->
                         pokemonList.addAll(pokemons.results)
+
+
+                        pokemons.results.forEach { pokemon ->
+                            val detailsResponse = pokeApi.getPokemonDetails(pokemon.name)
+                            if (detailsResponse.isSuccessful) {
+                                detailsResponse.body()?.let { details ->
+                                    // Atualiza o Pokémon com os detalhes
+                                    val pokemonToUpdate = pokemonList.find { it.name == pokemon.name }
+                                    pokemonToUpdate?.weight = details.weight
+                                    pokemonToUpdate?.types = details.types.map { it.type.name }
+                                }
+                            }
+                        }
+
                         withContext(Dispatchers.Main) {
                             pokemonAdapter.notifyDataSetChanged()
                         }
@@ -62,8 +81,8 @@ class HomeActivity : AppCompatActivity() {
         }
     }
 
+
     private fun showPokemonDetails(pokemon: Pokemon) {
 
     }
 }
-

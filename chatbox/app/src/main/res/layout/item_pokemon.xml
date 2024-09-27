@@ -3,19 +3,29 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="8dp">
+    android:padding="16dp">
 
+    <!-- Nome do Pokémon -->
     <TextView
-        android:id="@+id/textViewPokemonName"
+        android:id="@+id/pokemonName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="18sp"
-        android:textColor="#000000"/>
+        android:textStyle="bold" />
 
+    <!-- Tipo(s) do Pokémon -->
     <TextView
-        android:id="@+id/textViewPokemonUrl"
+        android:id="@+id/pokemonType"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="14sp"
-        android:textColor="#888888"/>
+        android:textSize="16sp"
+        android:text="Tipos: " />
+
+    <!-- Peso do Pokémon -->
+    <TextView
+        android:id="@+id/pokemonWeight"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:text="Peso: " />
 </LinearLayout>

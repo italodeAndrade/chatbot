@@ -28,7 +28,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:foregroundTint="#FFFFFF"
-        android:text="inscrever-se"
+        android:text="Inscrever-se"
         android:textColor="#FD0303"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
