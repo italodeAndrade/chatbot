@@ -46,7 +46,7 @@ class HomeActivity : AppCompatActivity() {
         CoroutineScope(Dispatchers.IO).launch {
             try {
 
-                val response = pokeApi.getPokemonList(limit = 5)
+                val response = pokeApi.getPokemonList(limit = 9)
                 if (response.isSuccessful) {
                     response.body()?.let { pokemons ->
                         pokemonList.addAll(pokemons.results)
