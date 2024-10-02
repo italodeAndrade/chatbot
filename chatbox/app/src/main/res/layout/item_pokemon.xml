@@ -1,11 +1,10 @@
-<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:padding="16dp">
 
-    <!-- Nome do Pokémon -->
+
     <TextView
         android:id="@+id/pokemonName"
         android:layout_width="wrap_content"
@@ -13,7 +12,6 @@
         android:textSize="18sp"
         android:textStyle="bold" />
 
-    <!-- Tipo(s) do Pokémon -->
     <TextView
         android:id="@+id/pokemonType"
         android:layout_width="wrap_content"
@@ -21,11 +19,18 @@
         android:textSize="16sp"
         android:text="Tipos: " />
 
-    <!-- Peso do Pokémon -->
     <TextView
         android:id="@+id/pokemonWeight"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="16sp"
         android:text="Peso: " />
+
+    <ImageView
+        android:id="@+id/favoriteIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_star_border"
+    android:layout_gravity="end"
+    android:contentDescription="Ícone de Favorito" />
 </LinearLayout>

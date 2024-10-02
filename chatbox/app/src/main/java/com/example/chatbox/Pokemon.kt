@@ -3,7 +3,8 @@ package com.example.chatbox
 data class Pokemon(
     val name: String,
     var weight: Int = 0,
-    var types: List<String> = emptyList()
+    var types: List<String> = emptyList(),
+    var isFavorite: Boolean = false
 )
 
 

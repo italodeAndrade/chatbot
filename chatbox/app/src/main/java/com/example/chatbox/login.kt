@@ -29,7 +29,7 @@ class login : AppCompatActivity() {
             startActivity(intent)
         }
 
-        binding.button.setOnClickListener { // Alterado para o ID correto do botão
+        binding.button.setOnClickListener {
             val email = binding.email.text.toString()
             val senha = binding.senha.text.toString()
 
