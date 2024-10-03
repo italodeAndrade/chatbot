@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import android.widget.ImageView
-
+import com.bumptech.glide.Glide
 
 
 class PokemonAdapter(
@@ -19,11 +19,17 @@ class PokemonAdapter(
         val weightTextView: TextView = itemView.findViewById(R.id.pokemonWeight)
         val typeTextView: TextView = itemView.findViewById(R.id.pokemonType)
         val favoriteIcon: ImageView = itemView.findViewById(R.id.favoriteIcon)
+        val imageView: ImageView = itemView.findViewById(R.id.pokemonImage)
 
         fun bind(pokemon: Pokemon) {
             nameTextView.text = pokemon.name
             weightTextView.text = "Peso: ${pokemon.weight} kg"
             typeTextView.text = "Tipos: ${pokemon.types.joinToString(", ")}"
+
+
+            Glide.with(itemView.context)
+                .load(pokemon.imageUrl)
+                .into(imageView)
 
 
             if (pokemon.isFavorite) {

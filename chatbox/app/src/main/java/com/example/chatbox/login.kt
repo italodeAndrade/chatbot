@@ -41,7 +41,6 @@ class login : AppCompatActivity() {
                             Toast.makeText(this@login, "Login bem-sucedido!", Toast.LENGTH_SHORT).show()
                             val intent = Intent(this@login, HomeActivity::class.java)
                             startActivity(intent)
-                            finish()
                         } else {
                             Toast.makeText(this@login, "E-mail ou senha inválidos!", Toast.LENGTH_SHORT).show()
                         }

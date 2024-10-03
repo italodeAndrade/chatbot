@@ -10,6 +10,7 @@ class PokemonDetailActivity : AppCompatActivity() {
     private lateinit var pokemonDetailWeight: TextView
     private lateinit var pokemonDetailTypes: TextView
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detail)

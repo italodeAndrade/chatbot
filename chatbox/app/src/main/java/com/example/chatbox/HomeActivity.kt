@@ -12,6 +12,9 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+
 
 class HomeActivity : AppCompatActivity() {
 
@@ -47,24 +50,34 @@ class HomeActivity : AppCompatActivity() {
 
         CoroutineScope(Dispatchers.IO).launch {
             try {
-                val response = pokeApi.getPokemonList(limit = 5)
+                val response = pokeApi.getPokemonList(limit = 1)
                 if (response.isSuccessful) {
                     response.body()?.let { pokemons ->
                         pokemonList.clear()
                         pokemonList.addAll(pokemons.results)
 
 
-                        pokemons.results.forEach { pokemon ->
-                            val detailsResponse = pokeApi.getPokemonDetails(pokemon.name)
-                            if (detailsResponse.isSuccessful) {
-                                detailsResponse.body()?.let { details ->
-
-                                    val pokemonToUpdate = pokemonList.find { it.name == pokemon.name }
-                                    pokemonToUpdate?.weight = details.weight
-                                    pokemonToUpdate?.types = details.types.map { it.type.name }
+                        CoroutineScope(Dispatchers.IO).launch {
+                            val pokemonDetailsDeferred = pokemons.results.map { pokemon ->
+                                async {
+                                    val detailsResponse = pokeApi.getPokemonDetails(pokemon.name)
+                                    if (detailsResponse.isSuccessful) {
+                                        detailsResponse.body()?.let { details ->
+                                            val pokemonToUpdate = pokemonList.find { it.name == pokemon.name }
+                                            pokemonToUpdate?.weight = details.weight
+                                            pokemonToUpdate?.types = details.types.map { it.type.name }
+                                            pokemonToUpdate?.imageUrl = details.sprites.front_default
+                                        }
+                                    }
                                 }
                             }
+                            pokemonDetailsDeferred.awaitAll()
+                            withContext(Dispatchers.Main) {
+
+                                pokemonAdapter.notifyDataSetChanged()
+                            }
                         }
+
 
                         withContext(Dispatchers.Main) {
                             pokemonAdapter.notifyDataSetChanged()
