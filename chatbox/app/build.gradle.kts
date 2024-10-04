@@ -6,7 +6,7 @@ plugins {
 
 android {
     namespace = "com.example.chatbox"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.example.chatbox"
@@ -43,6 +43,7 @@ android {
     viewBinding {
         enable = true
     }
+    buildToolsVersion = "35.0.0"
 }
 
 dependencies {
@@ -57,7 +58,7 @@ dependencies {
     implementation(libs.androidx.room.ktx)
     kapt(libs.androidx.room.compiler)
     implementation(libs.androidx.room.testing)
-
+    implementation(libs.androidx.recyclerview)
     implementation(libs.retrofit)
     implementation(libs.retrofit.gson)
     implementation(libs.glide)
@@ -71,5 +72,7 @@ dependencies {
     implementation(libs.kotlinx.coroutines.core)
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.glide)
+    implementation(libs.androidxCustomView)
 }
+
 

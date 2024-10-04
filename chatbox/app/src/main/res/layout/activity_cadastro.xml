@@ -38,7 +38,7 @@
         android:layout_marginBottom="8dp"
         android:ems="10"
         android:hint="Senha"
-        android:inputType="text"
+        android:inputType="textPassword"
         app:layout_constraintBottom_toTopOf="@+id/editTextDate"
         app:layout_constraintEnd_toEndOf="@+id/editTextDate"
         app:layout_constraintStart_toStartOf="@+id/editTextDate" />

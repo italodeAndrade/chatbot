@@ -21,6 +21,8 @@ import android.text.Editable
 import android.text.TextWatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import java.text.SimpleDateFormat
+import java.util.*
 
 
 
@@ -121,8 +123,12 @@ class cadastro : AppCompatActivity() {
                     return@setOnClickListener
                 }
 
+                if (!isDateOfBirthValid(dataNascimento)) {
+                    Toast.makeText(this@cadastro, "Data de nascimento inválida! Deve ser maior de 18 anos e não pode ser uma data futura.", Toast.LENGTH_SHORT).show()
+                    return@setOnClickListener
+                }
+
                 val loginEntity = LoginEntity(email = email, senha = senha, dataNascimento = dataNascimento)
-                // Insira o registro usando coroutines
                 lifecycleScope.launch {
                     insertLogin(loginEntity)
                 }
@@ -130,6 +136,7 @@ class cadastro : AppCompatActivity() {
                 Toast.makeText(this@cadastro, "Por favor, preencha todos os campos.", Toast.LENGTH_SHORT).show()
             }
         }
+
 
         binding.lgRed.setOnClickListener {
             val intent = Intent(this@cadastro, login::class.java)
@@ -146,6 +153,10 @@ class cadastro : AppCompatActivity() {
                     binding.email.text.clear()
                     binding.editTextText2.text.clear()
                     binding.editTextDate.text.clear()
+
+                    val intent = Intent(this@cadastro, login::class.java)
+                    startActivity(intent)
+                    finish()
                 }
             } catch (e: Exception) {
                 withContext(Dispatchers.Main) {
@@ -155,14 +166,41 @@ class cadastro : AppCompatActivity() {
         }
     }
 
-    // Função para validar o formato do e-mail usando regex
+
     private fun isEmailValid(email: String): Boolean {
         return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()
     }
+
+
+    private fun isDateOfBirthValid(date: String): Boolean {
+
+        val sdf = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+        sdf.isLenient = false
+
+        return try {
+            val currentDate = Calendar.getInstance().time
+            val birthDate = sdf.parse(date) ?: return false
+
+
+            if (birthDate.after(currentDate)) {
+                return false
+            }
+
+            val calBirth = Calendar.getInstance().apply { time = birthDate }
+            val calNow = Calendar.getInstance()
+
+            val age = calNow.get(Calendar.YEAR) - calBirth.get(Calendar.YEAR)
+
+            if (calNow.get(Calendar.DAY_OF_YEAR) < calBirth.get(Calendar.DAY_OF_YEAR)) {
+                return age - 1 >= 18
+            }
+
+            age >= 18
+        } catch (e: Exception) {
+            false
+        }
+    }
 }
-
-
-
 
 
 
