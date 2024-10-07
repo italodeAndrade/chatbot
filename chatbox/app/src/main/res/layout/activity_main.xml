@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -35,24 +34,24 @@
 
     <EditText
         android:id="@+id/senha"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="240dp"
+        android:layout_height="48dp"
         android:layout_marginBottom="10dp"
         android:ems="10"
         android:inputType="textPassword"
+        android:hint="Insira sua senha"
         app:layout_constraintBottom_toTopOf="@+id/button"
         app:layout_constraintEnd_toEndOf="@+id/button"
         app:layout_constraintStart_toStartOf="@+id/button" />
 
     <EditText
         android:id="@+id/email"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="240dp"
+        android:layout_height="48dp"
         android:layout_marginBottom="20dp"
         android:ems="10"
         android:inputType="textEmailAddress"
-        android:selectAllOnFocus="false"
-        android:singleLine="false"
+        android:hint="Insira seu e-mail"
         app:layout_constraintBottom_toTopOf="@+id/senha"
         app:layout_constraintEnd_toEndOf="@+id/senha"
         app:layout_constraintStart_toStartOf="@+id/senha" />
@@ -61,7 +60,7 @@
         android:id="@+id/email_tt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="email"
+        android:text="E-mail"
         app:layout_constraintBottom_toTopOf="@+id/email"
         app:layout_constraintStart_toStartOf="@+id/email" />
 
@@ -69,7 +68,7 @@
         android:id="@+id/senha_tt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="senha"
+        android:text="Senha"
         app:layout_constraintBottom_toTopOf="@+id/senha"
         app:layout_constraintStart_toStartOf="@+id/senha" />
 
@@ -97,6 +96,5 @@
         app:layout_constraintEnd_toEndOf="@+id/imageView"
         app:layout_constraintStart_toStartOf="@+id/imageView"
         app:layout_constraintTop_toBottomOf="@+id/imageView" />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

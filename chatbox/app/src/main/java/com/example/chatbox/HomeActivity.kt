@@ -14,7 +14,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
-
+import kotlinx.coroutines.coroutineScope
 
 class HomeActivity : AppCompatActivity() {
 
@@ -41,61 +41,61 @@ class HomeActivity : AppCompatActivity() {
     }
 
     private fun fetchPokemonList() {
-        val retrofit = Retrofit.Builder()
-            .baseUrl("https://pokeapi.co/api/v2/")
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-
+        val retrofit = createRetrofit()
         val pokeApi = retrofit.create(PokeApiService::class.java)
 
         CoroutineScope(Dispatchers.IO).launch {
             try {
-                val response = pokeApi.getPokemonList(limit = 1)
+                val response = pokeApi.getPokemonList(limit = 10)
                 if (response.isSuccessful) {
                     response.body()?.let { pokemons ->
-                        pokemonList.clear()
-                        pokemonList.addAll(pokemons.results)
-
-
-                        CoroutineScope(Dispatchers.IO).launch {
-                            val pokemonDetailsDeferred = pokemons.results.map { pokemon ->
-                                async {
-                                    val detailsResponse = pokeApi.getPokemonDetails(pokemon.name)
-                                    if (detailsResponse.isSuccessful) {
-                                        detailsResponse.body()?.let { details ->
-                                            val pokemonToUpdate = pokemonList.find { it.name == pokemon.name }
-                                            pokemonToUpdate?.weight = details.weight
-                                            pokemonToUpdate?.types = details.types.map { it.type.name }
-                                            pokemonToUpdate?.imageUrl = details.sprites.front_default
-                                        }
-                                    }
-                                }
-                            }
-                            pokemonDetailsDeferred.awaitAll()
-                            withContext(Dispatchers.Main) {
-
-                                pokemonAdapter.notifyDataSetChanged()
-                            }
-                        }
-
-
-                        withContext(Dispatchers.Main) {
-                            pokemonAdapter.notifyDataSetChanged()
-                        }
+                        updatePokemonList(pokemons.results, pokeApi)
                     }
                 } else {
-                    withContext(Dispatchers.Main) {
-                        Toast.makeText(this@HomeActivity, "Erro ao carregar Pokémon", Toast.LENGTH_SHORT).show()
-                    }
+                    showErrorToast("Erro ao carregar Pokémon")
                 }
             } catch (e: Exception) {
-                withContext(Dispatchers.Main) {
-                    Toast.makeText(this@HomeActivity, "Erro: ${e.message}", Toast.LENGTH_SHORT).show()
-                }
+                showErrorToast("Erro: ${e.message}")
             }
         }
     }
 
+    private fun createRetrofit(): Retrofit {
+        return Retrofit.Builder()
+            .baseUrl("https://pokeapi.co/api/v2/")
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+    }
+
+    private suspend fun updatePokemonList(results: List<Pokemon>, pokeApi: PokeApiService) {
+        pokemonList.clear()
+        pokemonList.addAll(results)
+
+        coroutineScope {
+            val pokemonDetailsDeferred = results.map { pokemon ->
+                async {
+                    val detailsResponse = pokeApi.getPokemonDetails(pokemon.name)
+                    detailsResponse.body()?.let { details ->
+                        val pokemonToUpdate = pokemonList.find { it.name == pokemon.name }
+                        pokemonToUpdate?.apply {
+                            weight = details.weight
+                            types = details.types.map { it.type.name }
+                            imageUrl = details.sprites.front_default
+                        }
+                    }
+                }
+            }
+            pokemonDetailsDeferred.awaitAll()
+        }
+
+        withContext(Dispatchers.Main) {
+            pokemonAdapter.notifyDataSetChanged()
+        }
+    }
+
+    private fun showErrorToast(message: String) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+    }
 
     private fun showPokemonDetails(pokemon: Pokemon) {
         val intent = Intent(this, PokemonDetailActivity::class.java).apply {

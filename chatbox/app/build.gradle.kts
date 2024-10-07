@@ -73,6 +73,10 @@ dependencies {
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.glide)
     implementation(libs.androidxCustomView)
+    implementation(libs.androidxCustomViewPoolingContainer)
+    implementation(libs.androidx.recyclerview)
+
+
 }
 
 

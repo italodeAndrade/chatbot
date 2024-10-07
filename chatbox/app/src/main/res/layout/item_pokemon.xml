@@ -39,4 +39,5 @@
         android:src="@drawable/ic_star_border"
     android:layout_gravity="end"
     android:contentDescription="Ícone de Favorito" />
+
 </LinearLayout>
