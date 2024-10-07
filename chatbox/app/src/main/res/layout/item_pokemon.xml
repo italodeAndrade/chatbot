@@ -3,6 +3,7 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:padding="16dp">
+
     <ImageView
         android:id="@+id/pokemonImage"
         android:layout_width="100dp"
@@ -10,6 +11,7 @@
         android:layout_gravity="center"
         android:scaleType="centerCrop"
         android:contentDescription="Imagem do Pokémon" />
+
 
     <TextView
         android:id="@+id/pokemonName"
@@ -25,6 +27,7 @@
         android:textSize="16sp"
         android:text="Tipos: " />
 
+
     <TextView
         android:id="@+id/pokemonWeight"
         android:layout_width="wrap_content"
@@ -32,12 +35,19 @@
         android:textSize="16sp"
         android:text="Peso: " />
 
+    <TextView
+        android:id="@+id/pokemonDescription"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="8dp"
+        android:textSize="14sp"
+        android:visibility="gone"/>
+
     <ImageView
         android:id="@+id/favoriteIcon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/ic_star_border"
-    android:layout_gravity="end"
-    android:contentDescription="Ícone de Favorito" />
-
+        android:layout_gravity="end"
+        android:contentDescription="Ícone de Favorito" />
 </LinearLayout>

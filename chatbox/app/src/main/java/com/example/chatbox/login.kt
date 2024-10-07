@@ -22,12 +22,10 @@ class login : AppCompatActivity() {
 
         db = LoginDatabase.getDatabase(applicationContext)
 
-        // Verificar se o usuário já está logado
         val sharedPref = getSharedPreferences("LoginPrefs", MODE_PRIVATE)
         val isLoggedIn = sharedPref.getBoolean("isLoggedIn", false)
 
         if (isLoggedIn) {
-            // Se estiver logado, redireciona diretamente para a HomeActivity
             val intent = Intent(this@login, HomeActivity::class.java)
             startActivity(intent)
             finish()
@@ -47,7 +45,6 @@ class login : AppCompatActivity() {
                     val isValid = validateLogin(email, senha)
                     withContext(Dispatchers.Main) {
                         if (isValid) {
-                            // Login bem-sucedido: salvar estado de login em SharedPreferences
                             with(sharedPref.edit()) {
                                 putBoolean("isLoggedIn", true)
                                 apply()
@@ -56,7 +53,7 @@ class login : AppCompatActivity() {
                             Toast.makeText(this@login, "Login bem-sucedido!", Toast.LENGTH_SHORT).show()
                             val intent = Intent(this@login, HomeActivity::class.java)
                             startActivity(intent)
-                            finish() // Evita que o usuário volte para a tela de login
+                            finish()
                         } else {
                             Toast.makeText(this@login, "E-mail ou senha inválidos!", Toast.LENGTH_SHORT).show()
                         }

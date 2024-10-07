@@ -15,6 +15,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
+import android.util.Log
 
 class HomeActivity : AppCompatActivity() {
 
@@ -75,13 +76,28 @@ class HomeActivity : AppCompatActivity() {
             val pokemonDetailsDeferred = results.map { pokemon ->
                 async {
                     val detailsResponse = pokeApi.getPokemonDetails(pokemon.name)
-                    detailsResponse.body()?.let { details ->
-                        val pokemonToUpdate = pokemonList.find { it.name == pokemon.name }
-                        pokemonToUpdate?.apply {
-                            weight = details.weight
-                            types = details.types.map { it.type.name }
-                            imageUrl = details.sprites.front_default
+                    if (detailsResponse.isSuccessful) {
+                        detailsResponse.body()?.let { details ->
+                            val pokemonToUpdate = pokemonList.find { it.name == pokemon.name }
+                            pokemonToUpdate?.apply {
+                                weight = details.weight
+                                types = details.types.map { it.type.name }
+                                imageUrl = details.sprites.front_default
+
+
+                                val flavorTextEntries = details.flavor_text_entries
+                                description = if (!flavorTextEntries.isNullOrEmpty()) {
+
+                                    flavorTextEntries.find { it.language.name == "pt" }
+                                        ?.flavor_text ?: flavorTextEntries.find { it.language.name == "en" }?.flavor_text
+                                    ?: "Descrição não disponível"
+                                } else {
+                                    "Descrição não disponível"
+                                }
+                            }
                         }
+                    } else {
+                        Log.e("PokemonDetails", "Erro ao buscar detalhes do Pokémon: ${detailsResponse.errorBody()?.string()}")
                     }
                 }
             }
@@ -93,6 +109,7 @@ class HomeActivity : AppCompatActivity() {
         }
     }
 
+
     private fun showErrorToast(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
@@ -102,8 +119,11 @@ class HomeActivity : AppCompatActivity() {
             putExtra("pokemon_name", pokemon.name)
             putExtra("pokemon_weight", pokemon.weight)
             putExtra("pokemon_types", pokemon.types.toTypedArray())
+            putExtra("pokemon_image_url", pokemon.imageUrl)
+            putExtra("pokemon_description", pokemon.description)
         }
         startActivity(intent)
+
     }
 
 }

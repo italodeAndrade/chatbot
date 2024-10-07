@@ -1,53 +1,37 @@
 package com.example.chatbox
 
 import android.os.Bundle
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import com.example.chatbox.ui.theme.ChatboxTheme
+import com.bumptech.glide.Glide
 
 class PokemonDetailActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_pokemon_detail)
 
-        // Recuperar os dados enviados pela HomeActivity
         val pokemonName = intent.getStringExtra("pokemon_name") ?: "Nome não disponível"
         val pokemonWeight = intent.getIntExtra("pokemon_weight", 0)
         val pokemonTypes = intent.getStringArrayExtra("pokemon_types")?.joinToString(", ") ?: "Tipos não disponíveis"
+        val pokemonImageUrl = intent.getStringExtra("pokemon_image_url") ?: ""
+        val pokemonDescription = intent.getStringExtra("pokemon_description") ?: "Descrição não disponível"
 
-        setContent {
-            ChatboxTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    PokemonDetailScreen(
-                        name = pokemonName,
-                        weight = pokemonWeight,
-                        types = pokemonTypes,
-                        modifier = Modifier.padding(innerPadding)
-                    )
-                }
-            }
-        }
+        val pokemonImageView: ImageView = findViewById(R.id.pokemon_image)
+        val pokemonNameView: TextView = findViewById(R.id.pokemon_name)
+        val pokemonTypesView: TextView = findViewById(R.id.pokemon_types)
+        val pokemonWeightView: TextView = findViewById(R.id.pokemon_weight)
+        val pokemonDescriptionView: TextView = findViewById(R.id.pokemon_description)
+
+        Glide.with(this)
+            .load(pokemonImageUrl)
+            .into(pokemonImageView)
+
+        pokemonNameView.text = pokemonName
+        pokemonTypesView.text = "Tipos: $pokemonTypes"
+        pokemonWeightView.text = "Peso: $pokemonWeight kg"
+        pokemonDescriptionView.text = pokemonDescription
     }
+
 }
 
-@Composable
-fun PokemonDetailScreen(name: String, weight: Int, types: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Nome: $name\nPeso: $weight kg\nTipos: $types",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun PokemonDetailPreview() {
-    ChatboxTheme {
-        PokemonDetailScreen(name = "Pikachu", weight = 60, types = "Elétrico")
-    }
-}
