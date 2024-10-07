@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">chatbox</string>
+    <string name="title_activity_pokemon_detail">PokemonDetailActivity</string>
 </resources>
