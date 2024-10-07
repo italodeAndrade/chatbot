@@ -7,11 +7,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.example.chatbox.databinding.ActivityMainBinding
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import kotlinx.coroutines.flow.first
-
-
 
 class login : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -23,6 +21,17 @@ class login : AppCompatActivity() {
         setContentView(binding.root)
 
         db = LoginDatabase.getDatabase(applicationContext)
+
+        // Verificar se o usuário já está logado
+        val sharedPref = getSharedPreferences("LoginPrefs", MODE_PRIVATE)
+        val isLoggedIn = sharedPref.getBoolean("isLoggedIn", false)
+
+        if (isLoggedIn) {
+            // Se estiver logado, redireciona diretamente para a HomeActivity
+            val intent = Intent(this@login, HomeActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
 
         binding.inscreverse.setOnClickListener {
             val intent = Intent(this, cadastro::class.java)
@@ -38,9 +47,16 @@ class login : AppCompatActivity() {
                     val isValid = validateLogin(email, senha)
                     withContext(Dispatchers.Main) {
                         if (isValid) {
+                            // Login bem-sucedido: salvar estado de login em SharedPreferences
+                            with(sharedPref.edit()) {
+                                putBoolean("isLoggedIn", true)
+                                apply()
+                            }
+
                             Toast.makeText(this@login, "Login bem-sucedido!", Toast.LENGTH_SHORT).show()
                             val intent = Intent(this@login, HomeActivity::class.java)
                             startActivity(intent)
+                            finish() // Evita que o usuário volte para a tela de login
                         } else {
                             Toast.makeText(this@login, "E-mail ou senha inválidos!", Toast.LENGTH_SHORT).show()
                         }
@@ -59,3 +75,6 @@ class login : AppCompatActivity() {
         }
     }
 }
+
+
+
