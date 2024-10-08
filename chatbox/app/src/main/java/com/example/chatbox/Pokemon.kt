@@ -45,3 +45,7 @@ data class TypeInfo(
 data class Sprites(
     val front_default: String
 )
+
+data class PokemonSpecies(
+    val flavor_text_entries: List<FlavorTextEntry>
+)

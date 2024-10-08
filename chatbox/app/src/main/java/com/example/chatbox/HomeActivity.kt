@@ -76,28 +76,28 @@ class HomeActivity : AppCompatActivity() {
             val pokemonDetailsDeferred = results.map { pokemon ->
                 async {
                     val detailsResponse = pokeApi.getPokemonDetails(pokemon.name)
-                    if (detailsResponse.isSuccessful) {
+                    val speciesResponse = pokeApi.getPokemonSpecies(pokemon.name)
+
+                    if (detailsResponse.isSuccessful && speciesResponse.isSuccessful) {
                         detailsResponse.body()?.let { details ->
-                            val pokemonToUpdate = pokemonList.find { it.name == pokemon.name }
-                            pokemonToUpdate?.apply {
-                                weight = details.weight
-                                types = details.types.map { it.type.name }
-                                imageUrl = details.sprites.front_default
+                            speciesResponse.body()?.let { species ->
 
+                                val pokemonToUpdate = pokemonList.find { it.name == pokemon.name }
+                                pokemonToUpdate?.apply {
+                                    weight = details.weight
+                                    types = details.types.map { it.type.name }
+                                    imageUrl = details.sprites.front_default
 
-                                val flavorTextEntries = details.flavor_text_entries
-                                description = if (!flavorTextEntries.isNullOrEmpty()) {
-
-                                    flavorTextEntries.find { it.language.name == "pt" }
-                                        ?.flavor_text ?: flavorTextEntries.find { it.language.name == "en" }?.flavor_text
-                                    ?: "Descrição não disponível"
-                                } else {
-                                    "Descrição não disponível"
+                                    if (species.flavor_text_entries.isNullOrEmpty()) {
+                                        description = "Descrição não disponível"
+                                    } else {
+                                        val flavorTextEntry = species.flavor_text_entries.find { it.language.name == "pt-br" }
+                                            ?: species.flavor_text_entries.find { it.language.name == "en" }
+                                        description = flavorTextEntry?.flavor_text ?: "Descrição não disponível"
+                                    }
                                 }
                             }
                         }
-                    } else {
-                        Log.e("PokemonDetails", "Erro ao buscar detalhes do Pokémon: ${detailsResponse.errorBody()?.string()}")
                     }
                 }
             }

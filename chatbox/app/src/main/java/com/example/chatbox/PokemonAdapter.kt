@@ -19,13 +19,13 @@ class PokemonAdapter(
         private val typeTextView: TextView = itemView.findViewById(R.id.pokemonType)
         private val favoriteIcon: ImageView = itemView.findViewById(R.id.favoriteIcon)
         private val imageView: ImageView = itemView.findViewById(R.id.pokemonImage)
-        private val descriptionTextView: TextView = itemView.findViewById(R.id.pokemonDescription)
+
 
         fun bind(pokemon: Pokemon) {
             nameTextView.text = pokemon.name
             weightTextView.text = "Peso: ${pokemon.weight} kg"
             typeTextView.text = "Tipos: ${pokemon.types.joinToString(", ")}"
-            descriptionTextView.text = pokemon.description
+
 
 
             Glide.with(itemView.context)
